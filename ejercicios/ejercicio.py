@@ -1,3 +1,5 @@
+import operator
+
 CLIENTS = [
     {'id': 1, 'taxNumber': '86620855', 'name': 'HECTOR ACUÑA BOLAÑOS'},
     {'id': 2, 'taxNumber': '7317855K', 'name': 'JESUS RODRIGUEZ ALVAREZ'},
@@ -7,7 +9,17 @@ CLIENTS = [
     {'id': 6, 'taxNumber': '99804238', 'name': 'MOHAMED FERRE SAMPER'}
 ]
 
+CLIENTS2 = [
+    {'id': 1, 'taxNumber': '86620855', 'name': 'dasdasda'},
+    {'id': 2, 'taxNumber': '7317855K', 'name': 'JESUS RODRIGUEZ ALVAREZ'},
+    {'id': 3, 'taxNumber': '73826497', 'name': 'ANDRES NADAL MOLINA'},
+    {'id': 4, 'taxNumber': '88587715', 'name': 'SALVADOR ARNEDO MANRIQUEZ'},
+    {'id': 5, 'taxNumber': '94020190', 'name': 'VICTOR MANUEL ROJAS LUCAS'},
+    {'id': 6, 'taxNumber': '99804238', 'name': 'MOHAMED FERRE SAMPER'}
+]
+
 ACCOUNTS = [
+    {'clientId': 6, 'bankId': 1, 'balance': 15000},
     {'clientId': 6, 'bankId': 1, 'balance': 15000},
     {'clientId': 1, 'bankId': 3, 'balance': 18000},
     {'clientId': 5, 'bankId': 3, 'balance': 135000},
@@ -58,54 +70,81 @@ BANKS = [
 def list_clients_ids():
     return [client.get('id') for client in CLIENTS]
 
-#1 Arreglo con los ids de clientes ordenados por rut
+
+# 1 Arreglo con los ids de clientes ordenados por rut
 def list_clients_ids_sort_by_tax_number():
     # CODE HERE
-    pass
+    client_list = CLIENTS
+    client_list.sort(key=operator.itemgetter('taxNumber'))
+    return client_list
 
-#2 Arreglo con los nombres de cliente ordenados de mayor a menor por la suma TOTAL de los saldos de cada cliente en los bancos que participa.
+
+# 2 Arreglo con los nombres de cliente ordenados de mayor a menor por la suma TOTAL de los saldos de cada cliente en los bancos que participa.
+# Sumar por clientid el total de los account --- Recorrer todos los accounts
+# Ordenar de mayor a menor.
+
+
 def sort_clients_total_balances():
-    # CODE HERE
-    pass
+    # Acumulador de los registros de los clientes y su total
+    clients_total = []
+    for account in ACCOUNTS:
+        # Bandera o Flag, para saber si debemos agregar o no un nuevo registro
+        debo_agregar = True
+        for client_total in clients_total:
+            if account['clientId'] == client_total['clientId']:
+                debo_agregar = False
+                client_total['balance'] += account['balance']
+        if debo_agregar:
+            clients_total.append({
+                'clientId': account['clientId'],
+                'balance': account['balance']
+            })
+    clients_total.sort(key=operator.itemgetter('balance'), reverse=True)
+    return clients_total
 
-#3 Diccionario en que las claves sean los nombres de los bancos y los valores un arreglo con los ruts de sus clientes ordenados alfabeticamente por nombre.
+
+# 3 Diccionario en que las claves sean los nombres de los bancos y los valores un arreglo con los ruts de sus clientes ordenados alfabeticamente por nombre.
 def banks_clients_taxt_numbers():
     # CODE HERE
     pass
 
-#4 Arreglo ordenado decrecientemente con los saldos de clientes que tengan más de 25.000 en el Banco SANTANDER
+
+# 4 Arreglo ordenado decrecientemente con los saldos de clientes que tengan más de 25.000 en el Banco SANTANDER
 def rich_clients_balance():
-    #CODE HERE
+    # CODE HERE
     pass
+
 
 # 5 Lista con ids de bancos ordenados crecientemente por la cantidad TOTAL de dinero que administran.
 def bank_ranking_by_total_balance():
-    #CODE HERE
+    # CODE HERE
     pass
+
 
 # 6 Diccionario en que las claves sean los nombres de los bancos y los valores el número de clientes que solo tengan cuentas en ese banco.
 def bank_fidelity():
-    #CODE HERE
+    # CODE HERE
     pass
+
 
 # 7 Diccionario en que las claves sean los nombres de los bancos y los valores el id de su cliente con menos dinero.
 def banks_poor_clients():
-    #CODE HERE
+    # CODE HERE
     pass
+
 
 # 8 Agregar nuevo cliente con datos ficticios a "clientes" y agregar una cuenta en el BANCO ESTADO con un saldo de 9000 para este nuevo empleado.
 # Luego devolver el lugar que ocupa este cliente en el ranking de la pregunta 2.
 # No modificar listas originales para no alterar las respuestas anteriores al correr la solución
 def new_client_ranking():
-    #CODE HERE
+    # CODE HERE
     pass
-
 
 
 print('Pregunta 0')
 print(list_clients_ids())
 print('Pregunta 1')
-print(sort_clients_total_balances())
+print(list_clients_ids_sort_by_tax_number())
 print('Pregunta 2')
 print(sort_clients_total_balances())
 print('Pregunta 3')
